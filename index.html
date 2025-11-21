@@ -77,20 +77,32 @@
             background: #333;
             color: white;
             border: 2px solid #ffd700;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: bold;
+            min-width: 140px;
         }
         
         .btn.active {
             background: #ffd700;
             color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
         }
         
         .btn:hover {
             transform: translateY(-2px);
+        }
+        
+        .selection-info {
+            text-align: center;
+            color: #ffd700;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 16px;
         }
         
         .price {
@@ -180,6 +192,14 @@
             text-align: center;
             color: #ffd700;
         }
+
+        @media (max-width: 768px) {
+            .btn {
+                display: block;
+                width: 200px;
+                margin: 10px auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -194,24 +214,39 @@
         
         <!-- السلايدر -->
         <div class="carousel" id="carousel">
-            <img src="https://i.ibb.co/x9QgmgV/IMG-20251121-094931-497.jpg" class="active" alt="معطف رمادي">
-            <img src="https://i.ibb.co/JwCNcdS1/IMG-20251121-094811-160.jpg" alt="معطف رمادي">
-            <img src="https://i.ibb.co/nNWr1kQv/IMG-20251121-095023-231.jpg" alt="معطف رمادي">
-            <img src="https://i.ibb.co/Z1NsYKgw/IMG-20251115-102643-045.jpg" alt="معطف أسود">
-            <img src="https://i.ibb.co/qQFWYZQ/IMG-20251115-102702-140-2.jpg" alt="معطف أسود">
+            <!-- الصور الجديدة أولاً (رمادي - تصميم 2) -->
+            <img src="https://i.ibb.co/x9QgmgV/IMG-20251121-094931-497.jpg" class="active" alt="معطف رمادي تصميم جديد" data-color="gray" data-design="design2">
+            <img src="https://i.ibb.co/JwCNcdS1/IMG-20251121-094811-160.jpg" alt="معطف رمادي تصميم جديد" data-color="gray" data-design="design2">
+            <img src="https://i.ibb.co/nNWr1kQv/IMG-20251121-095023-231.jpg" alt="معطف رمادي تصميم جديد" data-color="gray" data-design="design2">
+            
+            <!-- الصور الرمادية القديمة (رمادي - تصميم 1) -->
+            <img src="https://i.ibb.co/8LhBWJHG/IMG-20251117-122919-876.jpg" alt="معطف رمادي تصميم قديم" data-color="gray" data-design="design1">
+            <img src="https://i.ibb.co/v4CHBD30/IMG-20251117-123349-008-2.jpg" alt="معطف رمادي تصميم قديم" data-color="gray" data-design="design1">
+            <img src="https://i.ibb.co/XZJHDwPG/IMG-20251117-122951-449-2.jpg" alt="معطف رمادي تصميم قديم" data-color="gray" data-design="design1">
+            <img src="https://i.ibb.co/FbFq9yX5/IMG-20251117-123256-026-2.jpg" alt="معطف رمادي تصميم قديم" data-color="gray" data-design="design1">
+            
+            <!-- الصور السوداء (أسود - تصميم 1) -->
+            <img src="https://i.ibb.co/Z1NsYKgw/IMG-20251115-102643-045.jpg" alt="معطف أسود" data-color="black" data-design="design1">
+            <img src="https://i.ibb.co/qQFWYZQ/IMG-20251115-102702-140-2.jpg" alt="معطف أسود" data-color="black" data-design="design1">
+            <img src="https://i.ibb.co/qScKYpk/IMG-20251115-102622-635-2.jpg" alt="معطف أسود" data-color="black" data-design="design1">
         </div>
         
         <!-- اختيار اللون والتصميم -->
         <div class="selection">
             <div style="margin-bottom: 15px;">
-                <button class="btn active" onclick="showAllColors()">جميع الألوان</button>
-                <button class="btn" onclick="filterByColor('gray')">الرمادي</button>
-                <button class="btn" onclick="filterByColor('black')">الأسود</button>
+                <button class="btn active" onclick="selectColor('all')">🎨 جميع الألوان</button>
+                <button class="btn" onclick="selectColor('gray')">🟦 اللون الرمادي</button>
+                <button class="btn" onclick="selectColor('black')">⚫ اللون الأسود</button>
             </div>
             
-            <div>
-                <button class="btn active" onclick="selectDesign('design1', ['M', 'L'])">تصميم 1 - M/L</button>
-                <button class="btn" onclick="selectDesign('design2', ['M', 'L', 'XL'])">تصميم 2 - M/L/XL</button>
+            <div id="designSelection">
+                <button class="btn active" onclick="selectDesign('all', 'جميع التصاميم', ['M', 'L', 'XL'])">📐 جميع التصاميم</button>
+                <button class="btn" onclick="selectDesign('design1', 'تصميم 1 - مقاس M/L', ['M', 'L'])">📏 تصميم 1 - M/L</button>
+                <button class="btn" onclick="selectDesign('design2', 'تصميم 2 - مقاس M/L/XL', ['M', 'L', 'XL'])">📐 تصميم 2 - M/L/XL</button>
+            </div>
+            
+            <div class="selection-info" id="selectionInfo">
+                ✓ جميع التصاميم والألوان متاحة
             </div>
         </div>
         
@@ -285,12 +320,13 @@
             </div>
             
             <label for="designInput">🎨 التصميم المختار:</label>
-            <input type="text" id="designInput" value="تصميم 1 - مقاس M/L" readonly style="background: #2b2b2b;">
+            <input type="text" id="designInput" value="جميع التصاميم" readonly style="background: #2b2b2b;">
             
             <label for="size">📏 المقاس:</label>
             <select id="size" required>
                 <option value="M">M (متوسط)</option>
                 <option value="L">L (كبير)</option>
+                <option value="XL">XL (كبير جداً)</option>
             </select>
             
             <label for="quantity">🔢 الكمية:</label>
@@ -311,44 +347,76 @@
     </div>
 
     <script>
-        // السلايدر
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('#carousel img');
-        
-        function startSlider() {
-            setInterval(() => {
-                slides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
+        // النظام الجديد للفلترة
+        let currentColor = 'all';
+        let currentDesign = 'all';
+        let slideInterval;
+
+        // السلايدر الذكي
+        function startCarousel() {
+            const slides = document.querySelectorAll('#carousel img');
+            const filteredSlides = Array.from(slides).filter(img => {
+                const imgColor = img.getAttribute('data-color');
+                const imgDesign = img.getAttribute('data-design');
+                
+                if (currentColor === 'all' && currentDesign === 'all') return true;
+                if (currentColor === 'all') return imgDesign === currentDesign;
+                if (currentDesign === 'all') return imgColor === currentColor;
+                return imgColor === currentColor && imgDesign === currentDesign;
+            });
+
+            if (filteredSlides.length === 0) return;
+
+            // إيقاف السلايدر السابق
+            if (slideInterval) clearInterval(slideInterval);
+
+            // إخفاء كل الصور أولاً
+            slides.forEach(img => {
+                img.classList.remove('active');
+                img.style.display = 'none';
+            });
+
+            // إظهار الصور المفلترة فقط
+            filteredSlides.forEach((img, index) => {
+                img.style.display = 'block';
+                if (index === 0) img.classList.add('active');
+            });
+
+            // تشغيل السلايدر الجديد
+            let currentIndex = 0;
+            slideInterval = setInterval(() => {
+                filteredSlides[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % filteredSlides.length;
+                filteredSlides[currentIndex].classList.add('active');
             }, 3000);
         }
-        
-        // فلترة الألوان
-        function showAllColors() {
-            slides.forEach(slide => slide.style.display = 'block');
-            updateButtons(event.target);
+
+        // اختيار اللون
+        function selectColor(color) {
+            currentColor = color;
+            updateButtons('color', event.target);
+            updateSelectionInfo();
+            startCarousel();
         }
-        
-        function filterByColor(color) {
-            slides.forEach(slide => {
-                const src = slide.src.toLowerCase();
-                if (color === 'gray') {
-                    slide.style.display = src.includes('gray') || !src.includes('black') ? 'block' : 'none';
-                } else if (color === 'black') {
-                    slide.style.display = src.includes('black') ? 'block' : 'none';
-                }
-            });
-            updateButtons(event.target);
-        }
-        
+
         // اختيار التصميم
-        function selectDesign(designId, sizes) {
-            const designName = designId === 'design1' ? 'تصميم 1 - مقاس M/L' : 'تصميم 2 - مقاس M/L/XL';
+        function selectDesign(design, designName, sizes) {
+            currentDesign = design;
             document.getElementById('designInput').value = designName;
             updateSizeOptions(sizes);
-            updateButtons(event.target);
+            updateButtons('design', event.target);
+            updateSelectionInfo();
+            startCarousel();
         }
-        
+
+        // تحديث أزرار الاختيار
+        function updateButtons(type, clickedButton) {
+            const buttons = clickedButton.parentElement.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+        }
+
+        // تحديث خيارات المقاس
         function updateSizeOptions(sizes) {
             const sizeSelect = document.getElementById('size');
             sizeSelect.innerHTML = '';
@@ -359,14 +427,27 @@
                 sizeSelect.appendChild(option);
             });
         }
-        
-        function updateButtons(clickedButton) {
-            const buttons = clickedButton.parentElement.querySelectorAll('.btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            clickedButton.classList.add('active');
+
+        // تحديث معلومات الاختيار
+        function updateSelectionInfo() {
+            const infoElement = document.getElementById('selectionInfo');
+            
+            if (currentColor === 'all' && currentDesign === 'all') {
+                infoElement.textContent = '✓ جميع التصاميم والألوان متاحة';
+            } else if (currentColor === 'all') {
+                const designName = currentDesign === 'design1' ? 'التصميم 1' : 'التصميم 2';
+                infoElement.textContent = `✓ ${designName} - جميع الألوان متاحة`;
+            } else if (currentDesign === 'all') {
+                const colorName = currentColor === 'gray' ? 'الرمادي' : 'الأسود';
+                infoElement.textContent = `✓ جميع التصاميم - اللون ${colorName}`;
+            } else {
+                const colorName = currentColor === 'gray' ? 'الرمادي' : 'الأسود';
+                const designName = currentDesign === 'design1' ? 'التصميم 1' : 'التصميم 2';
+                infoElement.textContent = `✓ ${designName} - اللون ${colorName}`;
+            }
         }
 
-        // إدارة التوصيل
+        // إدارة التوصيل (نفس الكود السابق)
         function showDeliveryOptions() {
             const stateSelect = document.getElementById('state');
             const deliveryOptions = document.getElementById('deliveryOptions');
@@ -425,7 +506,9 @@
         }
         
         // بدء التشغيل
-        window.addEventListener('load', startSlider);
+        window.addEventListener('load', function() {
+            startCarousel();
+        });
     </script>
 </body>
 </html>
